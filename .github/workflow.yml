@@ -1,0 +1,58 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  prebuild:
+    name: test, lint, type check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up environment
+        run: >-
+          pip install .[dev]
+      - name: Test with pytest
+        run: >-
+          pytest -W error
+      - name: Lint with ruff
+        run: >-
+          ruff check cool_package/
+      - name: Type check with mypy
+        run: >-
+          mypy cool_package/
+
+  build:
+    needs:
+      - prebuild
+    name: do something else
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Do something else
+        run: >-
+          echo "Something"
