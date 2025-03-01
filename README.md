@@ -1,5 +1,7 @@
 # Python package template
 
+[![Custom shields.io](https://img.shields.io/badge/docs-brightgreen?logo=github&logoColor=green&label=gh-pages)](https://chicago-club-management-company.github.io/python_package_template/)
+
 Example package template. You can run and install with:
 
 ```bash
